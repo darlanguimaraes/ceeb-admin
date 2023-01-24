@@ -1,50 +1,130 @@
 import React, { ReactNode } from "react";
-import Header from "./Header";
+import { Divider, Layout as Theme, Menu, Spin } from "antd";
+import { Content, Footer, Header } from "antd/lib/layout/layout";
+import {
+  HomeOutlined,
+  DollarCircleOutlined,
+  UnorderedListOutlined,
+  FileExcelOutlined,
+  FileZipOutlined,
+  BookFilled,
+  ReadFilled,
+  UserOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
+import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
+import Unauthenticated from "./Unauthenticated";
 
 type Props = {
   children: ReactNode;
+  title?: string;
 };
 
-const Layout: React.FC<Props> = (props) => (
-  <div>
-    <Header />
-    <div className="layout">{props.children}</div>
-    <style jsx global>{`
-      html {
-        box-sizing: border-box;
-      }
+const Layout = ({ children, title = "This is the default title" }: Props) => {
+  const { data: session, status } = useSession();
 
-      *,
-      *:before,
-      *:after {
-        box-sizing: inherit;
-      }
+  if (status === "loading") {
+    return (
+      <Spin tip="Carregando..." size="large">
+        <div className="content" />
+      </Spin>
+    );
+  }
+  if (status === "unauthenticated") {
+    return <Unauthenticated />;
+  }
 
-      body {
-        margin: 0;
-        padding: 0;
-        font-size: 16px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-          "Segoe UI Symbol";
-        background: rgba(0, 0, 0, 0.05);
-      }
+  if (session) {
+    return (
+      <Theme>
+        <Header>
+          <div className="logo" />
+          <title>CEEB</title>
+          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
+            <Link href="/">
+              <a>
+                <Menu.Item key="index" title="Home">
+                  <HomeOutlined /> Home
+                </Menu.Item>
+              </a>
+            </Link>
+            <Menu.Item key="emprestimo" title="Empréstimo - Livros">
+              <Link href="/lending">
+                <a>
+                  <ReadFilled /> Empréstimo de Livros
+                </a>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="cadastro" title="Cadastro - Livros">
+              <Link href="/book">
+                <a>
+                  <BookFilled /> Cadastro de Livros
+                </a>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="leitor" title="Leitor">
+              <Link href="/reader">
+                <a>
+                  <UserOutlined /> Leitor
+                </a>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="contas" title="Contas">
+              <Link href="/invoice">
+                <a>
+                  <DollarCircleOutlined /> Contas
+                </a>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="categorias" title="Categoris">
+              <Link href="/category">
+                <a>
+                  <UnorderedListOutlined /> Categorias
+                </a>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="report" title="Relatório">
+              <Link href="/report">
+                <a>
+                  <FileExcelOutlined /> Relatório
+                </a>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="backup" title="Gerar backup">
+              <Link href="/backup">
+                <a>
+                  <FileZipOutlined /> Gerar Backup
+                </a>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="sair" title="Sair">
+              <div onClick={() => signOut()}>
+                <LogoutOutlined /> Sair
+              </div>
+            </Menu.Item>
+          </Menu>
+        </Header>
+        <Content style={{ padding: "0 50px", minHeight: "500px" }}>
+          <Divider orientation="left">{title}</Divider>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+            }}
+          >
+            {children}
+          </div>
+        </Content>
+        <Footer style={{ textAlign: "center" }}>
+          Casa Espírita Eurípedes Barsanulpho - {new Date().getFullYear()}
+        </Footer>
+      </Theme>
+    );
+  }
 
-      input,
-      textarea {
-        font-size: 16px;
-      }
-
-      button {
-        cursor: pointer;
-      }
-    `}</style>
-    <style jsx>{`
-      .layout {
-        padding: 0 2rem;
-      }
-    `}</style>
-  </div>
-);
+  return <Unauthenticated />;
+};
 
 export default Layout;

@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  username  String
+  email     String
+  password  String
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+}
+
+model Configuration {
+  id           String   @id @default(uuid())
+  penaltyValue Decimal
+  lendingDays  Int
+  createdAt    DateTime @default(now()) @map(name: "created_at")
+  updatedAt    DateTime @updatedAt @map(name: "updated_at")
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  updatedAt DateTime  @updatedAt @map(name: "updated_at")
+  Invoice   Invoice[]
+}
+
+model Book {
+  id        String    @id @default(uuid())
+  name      String
+  author    String
+  writer    String
+  code      String
+  borrow    Boolean   @default(false)
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  updatedAt DateTime  @updatedAt @map(name: "updated_at")
+  Lending   Lending[]
+
+  @@map("books")
+}
+
+model Reader {
+  id        String    @id @default(uuid())
+  name      String
+  phone     String?
+  address   String?
+  city      String?
+  openLoan  Boolean   @default(false)
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  updatedAt DateTime  @updatedAt @map(name: "updated_at")
+  Lending   Lending[]
+
+  @@map("readers")
+}
+
+model Lending {
+  id           String    @id @default(uuid())
+  book         Book      @relation(fields: [bookId], references: [id])
+  bookId       String
+  reader       Reader    @relation(fields: [readerId], references: [id])
+  readerId     String
+  date         DateTime
+  expectedDate DateTime
+  deliveryDate DateTime?
+  code         String?
+  returned     Boolean   @default(false)
+  createdAt    DateTime  @default(now()) @map(name: "created_at")
+  updatedAt    DateTime  @updatedAt @map(name: "updated_at")
+  Invoice      Invoice[]
+}
+
+model Invoice {
+  id          String   @id @default(uuid())
+  date        DateTime
+  quantity    Decimal
+  value       Decimal
+  credit      Boolean  @default(false)
+  paymentType String
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  lending     Lending? @relation(fields: [lendingId], references: [id])
+  lendingId   String?
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+  updatedAt   DateTime @updatedAt @map(name: "updated_at")
+}
