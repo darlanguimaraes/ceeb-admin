@@ -1,0 +1,12 @@
+{
+  "extends": "next",
+  // ...
+  "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": 0 // <--- THIS IS THE NEW RULE
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2020
+  }
+}

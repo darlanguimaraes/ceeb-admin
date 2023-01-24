@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
     "antd": "^5.0.5",
     "dayjs": "^1.11.7",
     "downloadjs": "^1.4.7",
+    "eslint-plugin-react-hooks": "^5.0.0-next-ee8509801-20230117",
     "exceljs": "^4.3.0",
     "jsonwebtoken": "^9.0.0",
     "next": "12.2.5",
@@ -28,6 +30,8 @@
   "devDependencies": {
     "@types/node": "17.0.14",
     "@types/react": "17.0.38",
+    "eslint": "^8.32.0",
+    "eslint-config-next": "13.1.5",
     "prisma": "^4.7.1",
     "typescript": "4.5.5"
   }
