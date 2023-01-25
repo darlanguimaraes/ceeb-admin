@@ -1,13 +1,7 @@
+import { Prisma } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 import validate from "../../../util/validateRequest";
-
-interface Filter {
-  id?: string;
-  name?: {
-    contains: string;
-  };
-}
 
 export default async function handler(
   request: NextApiRequest,
@@ -22,18 +16,41 @@ export default async function handler(
   if (method === "GET") {
     const { name } = request.query;
 
-    const where = {} as Filter;
+    const where = {} as Prisma.BookWhereInput;
     if (name) {
-      where.name = {
-        contains: name + "",
-      };
+      where.OR = [
+        {
+          name: {
+            contains: ''+name,
+            mode: 'insensitive',
+          }
+        },
+        {
+          author: {
+            contains: ''+name,
+            mode: 'insensitive',
+          }
+        },
+        {
+          code: {
+            contains: ''+name,
+            mode: 'insensitive',
+          }
+        },
+        {
+          edition: {
+            contains: ''+name,
+            mode: 'insensitive',
+          }
+        }
+      ]
     }
 
     const books = await prisma.book.findMany({
       where,
       orderBy: [
         {
-          name: "desc",
+          name: "asc",
         },
       ],
     });

@@ -1,4 +1,4 @@
-import { EditOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, EditOutlined } from "@ant-design/icons";
 import {
   Button,
   Col,
@@ -25,6 +25,7 @@ interface ReaderType {
   author?: string;
   writer: string;
   code: string;
+  edition: string;
   borrow: boolean;
 }
 
@@ -62,13 +63,25 @@ const Book = () => {
       title: "Código",
       dataIndex: "code",
       key: "code",
-      width: 200,
+      width: 180,
+    },
+    {
+      title: "Edição",
+      dataIndex: "edition",
+      key: "edition",
+      width: 180,
     },
     {
       title: "Disponível",
       dataIndex: "borrow",
       key: "borrow",
       width: 100,
+      render: (value) =>
+        value ? (
+          <CloseOutlined style={{ color: "red" }} />
+        ) : (
+          <CheckOutlined style={{ color: "green" }} />
+        ),
     },
 
     {
@@ -78,15 +91,18 @@ const Book = () => {
       render: (_, record) => (
         <Space size="middle">
           <a>
-            <Button type="link" onClick={() => {
-              setId(record.id);
-              setName(record.name);
-              setAuthor(record.author);
-              setWriter(record.writer);
-              setCode(record.code);
-              setBorrow(record.borrow);
-              setOpenModal(true);
-            }}>
+            <Button
+              type="link"
+              onClick={() => {
+                setId(record.id);
+                setName(record.name);
+                setAuthor(record.author);
+                setWriter(record.writer);
+                setCode(record.code);
+                setBorrow(record.borrow);
+                setOpenModal(true);
+              }}
+            >
               <EditOutlined />
             </Button>
           </a>
@@ -159,27 +175,22 @@ const Book = () => {
       <div
         style={{
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
           marginBottom: "5px",
         }}
       >
+        <Search
+          placeholder="Digite o nome"
+          enterButton="Pesquisar"
+          value={filterName}
+          onChange={(input) => setFilterName(input.target.value)}
+          onSearch={async () => await getBooks(0)}
+          style={{width: 400}}
+        />
         <Button type="primary" onClick={() => setOpenModal(true)}>
           Novo
         </Button>
       </div>
-      <Divider />
-      <Row gutter={16}>
-        <Col>
-          <Search
-            placeholder="Digite o nome"
-            enterButton="Pesquisar"
-            size="large"
-            value={filterName}
-            onChange={(input) => setFilterName(input.target.value)}
-            onSearch={async () => await getBooks(0)}
-          />
-        </Col>
-      </Row>
       <Divider />
       <Table columns={columns} dataSource={books} pagination={false} />
       <Pagination defaultCurrent={1} total={total} onChange={onChange} />
@@ -240,7 +251,7 @@ const Book = () => {
             Disponível
           </Col>
           <Col className="gutter-row" span={18}>
-            <Switch disabled={true} defaultChecked checked={!borrow}/>
+            <Switch disabled={true} defaultChecked checked={!borrow} />
           </Col>
         </Row>
       </Modal>

@@ -1,13 +1,7 @@
+import { Prisma } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 import validate from "../../../util/validateRequest";
-
-interface Filter {
-  id?: string,
-  name?: {
-    contains: string,
-  }
-}
 
 export default async function handler(
   request: NextApiRequest,
@@ -23,10 +17,11 @@ export default async function handler(
     const { page, name } = request.query;
     const skip = page && +page ? (+page - 1) * 10 : 0;
 
-    const where = {} as Filter;
+    const where = {} as Prisma.ReaderWhereInput;
     if (name) {
       where.name = {
         contains: name+'',
+        mode: 'insensitive'
       };
     }
 
@@ -39,7 +34,7 @@ export default async function handler(
       take: 10,
       orderBy: [
         {
-          name: "desc",
+          name: "asc",
         },
       ],
     });

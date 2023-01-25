@@ -67,6 +67,12 @@ const LendingPage = () => {
       render: (value) => value.code,
     },
     {
+      title: "Data",
+      dataIndex: "date",
+      key: "date",
+      render: (text) => dayjs(text).format("DD/MM/YYYY"),
+    },
+    {
       title: "Data prevista",
       dataIndex: "expectedDate",
       key: "expectedDate",

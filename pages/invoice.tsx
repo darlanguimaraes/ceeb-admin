@@ -32,7 +32,7 @@ interface DataType {
   credit: boolean;
   category: string;
   categoryId: string,
-  paymentType: number,
+  paymentType: string,
 }
 
 const Invoice = () => {
@@ -49,7 +49,7 @@ const Invoice = () => {
   const [quantity, setQuantity] = useState(1);
   const [value, setValue] = useState(0);
   const [type, setType] = useState(true);
-  const [paymentType, setPaymentType] = useState(1);
+  const [paymentType, setPaymentType] = useState('1');
 
   const [categories, setCategories] = useState([]);
 
@@ -118,7 +118,7 @@ const Invoice = () => {
       title: "Tipo de Pagamento",
       dataIndex: "paymentType",
       width: 120,
-      render: (value) => PaymentType[value]
+      render: (value) => value === '1' ? 'Dinheiro' : 'PIX'
     },
     {
       title: "Ações",
@@ -229,7 +229,7 @@ const Invoice = () => {
     setQuantity(1);
     setValue(0);
     setType(true);
-    setPaymentType(1);
+    setPaymentType('1');
   };
 
   const selectDate: DatePickerProps["onChange"] = (date, dateString) => {
@@ -352,11 +352,11 @@ const Invoice = () => {
               style={{ width: "100%" }}
               value={paymentType}
               onChange={(value) => {
-                setPaymentType(+value);
+                setPaymentType(value);
               }}
             >
-              <Option value={1}>Dinheiro</Option>
-              <Option value={2}>PIX</Option>
+              <Option value={'1'}>Dinheiro</Option>
+              <Option value={'2'}>PIX</Option>
             </Select>
           </Col>
 

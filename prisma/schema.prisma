@@ -40,8 +40,9 @@ model Book {
   id        String    @id @default(uuid())
   name      String
   author    String
-  writer    String
+  writer    String?
   code      String
+  edition   String?
   borrow    Boolean   @default(false)
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
@@ -56,6 +57,7 @@ model Reader {
   phone     String?
   address   String?
   city      String?
+  email     String?
   openLoan  Boolean   @default(false)
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")

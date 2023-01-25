@@ -1,5 +1,15 @@
 import { CheckCircleOutlined } from "@ant-design/icons";
-import { Button, Col, Input, Modal, Row, Space, Table } from "antd";
+import {
+  Button,
+  Col,
+  DatePicker,
+  DatePickerProps,
+  Input,
+  Modal,
+  Row,
+  Space,
+  Table,
+} from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import Router from "next/router";
@@ -17,6 +27,8 @@ interface DataType {
 interface BookType {
   id: string;
   name: string;
+  code: string;
+  edition: string;
   borrow: boolean;
 }
 
@@ -33,6 +45,7 @@ const NewLending = () => {
   const [errorBook, setErrorBook] = useState("");
 
   const [message, setMessage] = useState("");
+  const [showButtonReturn, setShowButtonReturn] = useState(false);
 
   const [openModalBook, setOpenModalBook] = useState(false);
   const [filterBook, setFilterBook] = useState("");
@@ -41,6 +54,8 @@ const NewLending = () => {
   const [openModalReader, setOpenModalReader] = useState(false);
   const [filterReader, setFilterReader] = useState("");
   const [readers, setReaders] = useState([]);
+
+  const [date, setDate] = useState(new Date());
 
   const searchReader = async () => {
     if (!filterReader) {
@@ -103,8 +118,8 @@ const NewLending = () => {
     const lending = {
       bookId,
       readerId,
-      date: new Date(),
-      expectedDate: dayjs().add(30, "days").toDate(),
+      date,
+      expectedDate: dayjs(date).add(30, "days").toDate(),
     };
 
     const response = await fetch(`api/lending`, {
@@ -115,10 +130,15 @@ const NewLending = () => {
       body: JSON.stringify(lending),
     });
     if (response.status === 200) {
+      const result = await response.json();
       toast.success("Operação realizada!");
-      setTimeout(() => {
-        Router.push("/lending");
-      }, 500);
+      setShowButtonReturn(true);
+      setReaderId('');
+      setBookId('');
+      setDate(new Date());
+      setMessage(
+        `Data de Devolução: ${dayjs(result.expectedDate).format("DD/MM/YYYY")}`
+      );
     } else {
       const message = await response.json();
       toast.error(message.message);
@@ -163,6 +183,16 @@ const NewLending = () => {
       dataIndex: "name",
       key: "name",
     },
+    {
+      title: "Código",
+      dataIndex: "code",
+      key: "code",
+    },
+    {
+      title: "Edição",
+      dataIndex: "edition",
+      key: "edition",
+    },
 
     {
       title: "Ações",
@@ -190,10 +220,25 @@ const NewLending = () => {
     },
   ];
 
+  const selectDate: DatePickerProps["onChange"] = (date, dateString) => {
+    setDate(date.toDate());
+  };
   return (
     <Layout title="Novo Empréstimo">
       <ToastContainer />
       <Row gutter={[16, 24]}>
+        <Col span={12}>
+          <span style={{ textAlign: "center" }}>Data</span>
+        </Col>
+        <Col span={12}>
+          <DatePicker
+            placeholder="Selecione a data"
+            format="DD/MM/YYYY"
+            value={dayjs(date)}
+            onChange={selectDate}
+            allowClear={false}
+          />
+        </Col>
         <Col span={12}>
           <span style={{ textAlign: "center" }}>
             {readerName ? readerName : "Pesquise o leitor no botão ao lado"}
@@ -224,6 +269,24 @@ const NewLending = () => {
               >
                 Salvar
               </Button>
+            )}
+            {showButtonReturn && (
+              <Row gutter={16}>
+                <Col span={24}>
+                  <div style={{ display: 'flex', justifyContent: 'center', fontSize: 20, fontWeight: "bold" }}>
+                    {message}
+                  </div>
+                </Col>
+                <Col span={24}>
+                  <Button
+                    type="primary"
+                    onClick={() => Router.push("/lending")}
+                    style={{ width: "300px" }}
+                  >
+                    Voltar
+                  </Button>
+                </Col>
+              </Row>
             )}
           </div>
         </Col>
@@ -261,9 +324,7 @@ const NewLending = () => {
           onChange={(input) => setFilterBook(input.target.value)}
           onSearch={async () => await searchBook()}
         />
-        {books.length > 0 && (
-          <Table columns={columnsBook} dataSource={books} pagination={false} />
-        )}
+        {books.length > 0 && <Table columns={columnsBook} dataSource={books} />}
       </Modal>
     </Layout>
   );

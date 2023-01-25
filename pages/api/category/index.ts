@@ -24,7 +24,7 @@ export default async function handler(
       take: 10,
       orderBy: [
         {
-          name: "desc",
+          name: "asc",
         },
       ],
     });

@@ -4,6 +4,7 @@ import { Form, Input, Button } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { toast, ToastContainer } from "react-toastify";
 import { useCookies } from "react-cookie";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [username, setUsername] = useState("");

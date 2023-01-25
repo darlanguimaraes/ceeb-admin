@@ -33,6 +33,7 @@ export default async function handler(
       });
       response.json({ message: "Success" });
     } catch (error) {
+      console.log(error);
       response.status(500).json({ message: error });
     }
   } else if (method === "PUT") {

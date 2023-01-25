@@ -36,7 +36,7 @@ export default async function handler(
       },
       orderBy: [
         {
-          deliveryDate: "desc",
+          deliveryDate: "asc",
         },
       ],
     });
