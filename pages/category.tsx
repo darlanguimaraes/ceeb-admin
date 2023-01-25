@@ -16,6 +16,7 @@ import Layout from "../components/Layout";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { validateCookie } from "../util/cookieUtil";
 
 interface DataType {
   id: string;
@@ -146,3 +147,11 @@ const Category = () => {
 };
 
 export default Category;
+Category.getInitialProps = async ({ req, res }) => {
+  const isAuth = validateCookie(req);
+  if (res && !isAuth) {
+    res.writeHead(301, { Location: "/unauthenticated" });
+    res.end();
+  }
+  return {};
+};

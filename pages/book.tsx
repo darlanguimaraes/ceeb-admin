@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import Layout from "../components/Layout";
 import "react-toastify/dist/ReactToastify.css";
+import { validateCookie } from "../util/cookieUtil";
 
 interface ReaderType {
   id: string;
@@ -27,7 +28,7 @@ interface ReaderType {
   borrow: boolean;
 }
 
-const Reader = () => {
+const Book = () => {
   useEffect(() => {
     getBooks(0);
   }, []);
@@ -247,4 +248,12 @@ const Reader = () => {
   );
 };
 
-export default Reader;
+export default Book;
+Book.getInitialProps = async ({ req, res }) => {
+  const isAuth = validateCookie(req);
+  if (res && !isAuth) {
+    res.writeHead(301, { Location: "/unauthenticated" });
+    res.end();
+  }
+  return {};
+};

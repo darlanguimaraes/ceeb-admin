@@ -2,27 +2,42 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { Form, Input, Button } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { getCsrfToken, signIn } from "next-auth/react";
+import { toast, ToastContainer } from "react-toastify";
+import { useCookies } from "react-cookie";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [cookie, setCookie] = useCookies(["token"])
   const router = useRouter();
 
   const onFinish = async (values) => {
-    const res = await signIn("credentials", {
-      redirect: false,
+    const payload = {
       username,
-      password,
-      callbackUrl: `${window.location.origin}`,
+      password
+    };
+
+    const response = await fetch("/api/user", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
-    if (res?.error) {
-      setError(res.error);
+
+    const data = await response.json();
+    if (data.user && data.token) {
+      setCookie("token", data.token, {
+        path: "/",
+        maxAge: 60*60*24*300, 
+        sameSite: true,
+      })
+      router.push('/');
     } else {
-      setError(null);
+      toast.error('Credenciais inválidas!');
     }
-    if (res.url) router.push(res.url);
+
   };
   return (
     <div
@@ -34,6 +49,7 @@ const Login = () => {
         flexDirection: "column"
      }}
     >
+      <ToastContainer />
       <span style={{fontFamily:"roboto", fontSize:"1.3rem", paddingBottom: "50px"}}>Casa Espirita Eurípedes Barsanulpho</span>
       <Form
         name="normal_login"
@@ -92,11 +108,3 @@ const Login = () => {
 };
 
 export default Login;
-
-export async function getServerSideProps(context) {
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-    },
-  };
-}

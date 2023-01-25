@@ -6,6 +6,7 @@ import donwloadjs from "downloadjs";
 
 import Layout from "../components/Layout";
 import dayjs from "dayjs";
+import { validateCookie } from "../util/cookieUtil";
 
 const Report = () => {
   const [initialDate, setInitialDate] = useState(new Date());
@@ -79,3 +80,11 @@ const Report = () => {
 };
 
 export default Report;
+Report.getInitialProps = async ({ req, res }) => {
+  const isAuth = validateCookie(req);
+  if (res && !isAuth) {
+    res.writeHead(301, { Location: "/unauthenticated" });
+    res.end();
+  }
+  return {};
+};

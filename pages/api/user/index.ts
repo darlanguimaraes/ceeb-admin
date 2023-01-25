@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import jsonwebtoken from "jsonwebtoken";
 import prisma from "../../../lib/prisma";
 
 export default async function handler(
@@ -15,7 +16,12 @@ export default async function handler(
       },
     });
     if (user) {
-      response.json(user);
+      const secret = process.env.JWT_SECRET;
+      const token = jsonwebtoken.sign({ user, secret }, secret, {
+        expiresIn: "300d",
+      });
+
+      response.json({user, token});
     } else {
       response.status(401).json({ message: "User not found" });
     }

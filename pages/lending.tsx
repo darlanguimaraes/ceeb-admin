@@ -18,6 +18,7 @@ import { CheckCircleTwoTone, EditOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import dayjs from "dayjs";
 import { Lending } from "@prisma/client";
+import { validateCookie } from "../util/cookieUtil";
 
 interface DataType {
   id: string;
@@ -29,7 +30,7 @@ interface DataType {
   returned: boolean;
 }
 
-const Lending = () => {
+const LendingPage = () => {
   const [openModal, setOpenModal] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -257,4 +258,12 @@ const Lending = () => {
   );
 };
 
-export default Lending;
+export default LendingPage;
+LendingPage.getInitialProps = async ({ req, res }) => {
+  const isAuth = validateCookie(req);
+  if (res && !isAuth) {
+    res.writeHead(301, { Location: "/unauthenticated" });
+    res.end();
+  }
+  return {};
+};

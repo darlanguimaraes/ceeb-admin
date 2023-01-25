@@ -1,8 +1,7 @@
 import { Button, Layout as Theme } from "antd";
 import { Content, Footer, Header } from "antd/lib/layout/layout";
 import { LoginOutlined } from "@ant-design/icons";
-
-import { signIn } from "next-auth/react";
+import Router from "next/router";
 
 const Unauthenticated = () => {
   return (
@@ -31,7 +30,7 @@ const Unauthenticated = () => {
           <Button
             type="primary"
             icon={<LoginOutlined />}
-            onClick={() => signIn()}
+            onClick={() => Router.push("/login")}
             style={{ width: "200px" }}
           >
             Entrar

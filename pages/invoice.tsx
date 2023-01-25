@@ -22,6 +22,7 @@ import Layout from "../components/Layout";
 import { PaginationProps } from "antd/es/pagination";
 import { PaymentType } from "../util/payments";
 import dayjs from "dayjs";
+import { validateCookie } from "../util/cookieUtil";
 
 interface DataType {
   id: string;
@@ -382,3 +383,11 @@ const Invoice = () => {
 };
 
 export default Invoice;
+Invoice.getInitialProps = async ({ req, res }) => {
+  const isAuth = validateCookie(req);
+  if (res && !isAuth) {
+    res.writeHead(301, { Location: "/unauthenticated" });
+    res.end();
+  }
+  return {};
+};
