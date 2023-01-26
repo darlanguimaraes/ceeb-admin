@@ -37,12 +37,12 @@ export default async function handler(
             mode: 'insensitive',
           }
         },
-        {
-          edition: {
-            contains: ''+name,
+        // {
+        //   edition: {
+        //     contains: ''+name,
             // mode: 'insensitive',
-          }
-        }
+        //   }
+        // }
       ]
     }
 
