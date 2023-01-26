@@ -51,7 +51,6 @@ export default async function handler(
       bookId: data.bookId,
       date: new Date(data.date),
       expectedDate: new Date(data.expectedDate),
-      sync: false,
     } as Lending;
     const result = await prisma.lending.create({
       data: lending,
