@@ -40,7 +40,7 @@ export default async function handler(
         {
           edition: {
             contains: ''+name,
-            mode: 'insensitive',
+            // mode: 'insensitive',
           }
         }
       ]
