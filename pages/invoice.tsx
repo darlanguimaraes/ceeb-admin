@@ -190,6 +190,7 @@ const Invoice = () => {
         value,
         credit: type,
         paymentType: paymentType,
+        sync: false,
       };
       const method = id ? "PUT" : "POST";
       if (id) {

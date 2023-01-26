@@ -132,6 +132,7 @@ const Book = () => {
         author,
         writer,
         code,
+        sync: false,
       };
 
       const response = await fetch(`api/book`, {

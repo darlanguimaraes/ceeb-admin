@@ -93,6 +93,7 @@ const Reader = () => {
         address,
         phone,
         city,
+        sync: false,
       }
 
       const response = await fetch(`api/reader`, {

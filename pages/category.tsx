@@ -70,7 +70,7 @@ const Category = () => {
 
   const handleOk = async () => {
     if (name) {
-      const category = { id, name };
+      const category = { id, name, sync: false };
       const method = id ? "PUT" : "POST";
       const response = await fetch(`api/category`, {
         method,

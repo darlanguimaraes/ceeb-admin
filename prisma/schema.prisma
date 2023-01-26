@@ -31,6 +31,7 @@ model Configuration {
 model Category {
   id        String    @id @default(uuid())
   name      String
+  sync      Boolean   @default(false)
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
   Invoice   Invoice[]
@@ -44,6 +45,7 @@ model Book {
   code      String
   edition   String?
   borrow    Boolean   @default(false)
+  sync      Boolean   @default(false)
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
   Lending   Lending[]
@@ -59,6 +61,7 @@ model Reader {
   city      String?
   email     String?
   openLoan  Boolean   @default(false)
+  sync      Boolean   @default(false)
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
   Lending   Lending[]
@@ -77,6 +80,7 @@ model Lending {
   deliveryDate DateTime?
   code         String?
   returned     Boolean   @default(false)
+  sync         Boolean   @default(false)
   createdAt    DateTime  @default(now()) @map(name: "created_at")
   updatedAt    DateTime  @updatedAt @map(name: "updated_at")
   Invoice      Invoice[]
@@ -93,6 +97,7 @@ model Invoice {
   categoryId  String
   lending     Lending? @relation(fields: [lendingId], references: [id])
   lendingId   String?
+  sync        Boolean  @default(false)
   createdAt   DateTime @default(now()) @map(name: "created_at")
   updatedAt   DateTime @updatedAt @map(name: "updated_at")
 }

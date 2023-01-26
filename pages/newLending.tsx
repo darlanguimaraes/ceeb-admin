@@ -120,6 +120,7 @@ const NewLending = () => {
       readerId,
       date,
       expectedDate: dayjs(date).add(30, "days").toDate(),
+      sync: false,
     };
 
     const response = await fetch(`api/lending`, {
