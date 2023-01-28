@@ -49,7 +49,7 @@ export default async function handler(
               author: book.author,
               code: book.code,
               borrow: book.borrow,
-              edition: book.edition,
+              // edition: book.edition,
               writer: book.writer,
             }
           });
@@ -60,7 +60,7 @@ export default async function handler(
               author: book.author,
               code: book.code,
               borrow: book.borrow,
-              edition: book.edition,
+              // edition: book.edition,
               writer: book.writer,
             },
           });
