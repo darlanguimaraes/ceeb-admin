@@ -32,8 +32,8 @@ export default async function handler(
         author: true,
         borrow: true,
         code: true,
-        edition: true,
         writer: true,
+        edition: true,
       },
     });
     return response.json({ books });
