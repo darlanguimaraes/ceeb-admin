@@ -33,7 +33,7 @@ export default async function handler(
         borrow: true,
         code: true,
         writer: true,
-        // edition: true,
+        edition: true,
       },
     });
     return response.json({ books });
