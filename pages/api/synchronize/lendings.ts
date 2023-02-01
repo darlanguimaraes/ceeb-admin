@@ -4,6 +4,7 @@ import { runMiddleware } from "../../../util/corsUtils";
 import validate from "../../../util/validateRequest";
 
 interface LendingRemote {
+  id: string;
   name: string;
   bookId: string;
   readerId: string;
@@ -34,6 +35,8 @@ export default async function handler(
           select: {
             id: true,
             name: true,
+            code: true,
+            edition: true,
           }
         },
         code: true,
@@ -52,6 +55,7 @@ export default async function handler(
     return response.json({ lendings });
   } else if (method === "POST") {
     const data = JSON.parse(request.body) as Array<LendingRemote>;
+    const newData = [];
     if (data.length > 0) {
       for (const lending of data) {
         if (lending.remoteId) {
@@ -60,29 +64,33 @@ export default async function handler(
             data: {
               bookId: lending.bookId,
               code: lending.code,
-              date: lending.date,
-              deliveryDate: lending.deliveryDate,
-              expectedDate: lending.expectedDate,
+              date: new Date(lending.date),
+              deliveryDate: new Date(lending.deliveryDate),
+              expectedDate: lending.expectedDate ? new Date(lending.expectedDate) : null,
               readerId: lending.readerId,
               returned: lending.returned,
             },
           });
         } else {
-          await prisma.lending.create({
+          const newLending = await prisma.lending.create({
             data: {
               bookId: lending.bookId,
               code: lending.code,
-              date: lending.date,
-              deliveryDate: lending.deliveryDate,
-              expectedDate: lending.expectedDate,
+              date: new Date(lending.date),
+              deliveryDate: new Date(lending.deliveryDate),
+              expectedDate: lending.expectedDate ? new Date(lending.expectedDate) : null,
               readerId: lending.readerId,
               returned: lending.returned,
             },
           });
+          newData.push({
+            id: lending.id,
+            remoteId: newLending.id,
+          });
         }
       }
     }
-    return response.json({ message: "ok" });
+    return response.json({ newData });
   } else {
     response.status(500).json({ message: "Not allowed" });
   }

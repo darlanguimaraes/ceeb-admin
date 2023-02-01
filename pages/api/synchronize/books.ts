@@ -4,6 +4,7 @@ import { runMiddleware } from "../../../util/corsUtils";
 import validate from "../../../util/validateRequest";
 
 interface BookRemote {
+  id: string;
   name: string;
   author: string;
   writer?: string;
@@ -39,6 +40,7 @@ export default async function handler(
     return response.json({ books });
   } else if (method === "POST") {
     const data = JSON.parse(request.body) as Array<BookRemote>;
+    const newData = [];
     if (data.length > 0) {
       for (const book of data) {
         if (book.remoteId) {
@@ -54,7 +56,7 @@ export default async function handler(
             }
           });
         } else {
-          await prisma.book.create({
+          const newBook = await prisma.book.create({
             data: {
               name: book.name,
               author: book.author,
@@ -64,10 +66,14 @@ export default async function handler(
               writer: book.writer,
             },
           });
+          newData.push({
+            id: book.id,
+            remoteId: newBook.id,
+          });
         }
       }
     }
-    return response.json({ message: "ok" });
+    return response.json({ newData });
   } else {
     response.status(500).json({ message: "Not allowed" });
   }

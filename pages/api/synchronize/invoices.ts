@@ -4,6 +4,7 @@ import { runMiddleware } from "../../../util/corsUtils";
 import validate from "../../../util/validateRequest";
 
 interface InvoiceRemote {
+  id: string;
   name: string;
   date: Date;
   quantity: number;
@@ -42,13 +43,14 @@ export default async function handler(
     return response.json({ invoices });
   } else if (method === "POST") {
     const data = JSON.parse(request.body) as Array<InvoiceRemote>;
+    const newData = [];
     if (data.length > 0) {
       for (const invoice of data) {
         if (invoice.remoteId) {
           await prisma.invoice.update({
             where: { id: invoice.remoteId },
             data: {
-              date: invoice.date,
+              date: new Date(invoice.date),
               categoryId: invoice.categoryId,
               credit: invoice.credit,
               lendingId: invoice.lendingId,
@@ -58,9 +60,9 @@ export default async function handler(
             },
           });
         } else {
-          await prisma.invoice.create({
+          const newInvoice = await prisma.invoice.create({
             data: {
-              date: invoice.date,
+              date: new Date(invoice.date),
               categoryId: invoice.categoryId,
               credit: invoice.credit,
               lendingId: invoice.lendingId,
@@ -69,10 +71,14 @@ export default async function handler(
               value: invoice.value,
             },
           });
+          newData.push({
+            id: invoice.id,
+            remoteId: newInvoice.id,
+          });
         }
       }
     }
-    return response.json({ message: "ok" });
+    return response.json({ newData });
   } else {
     response.status(500).json({ message: "Not allowed" });
   }

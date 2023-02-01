@@ -4,6 +4,7 @@ import { runMiddleware } from "../../../util/corsUtils";
 import validate from "../../../util/validateRequest";
 
 interface ReaderRemote {
+  id: string;
   name: string;
   phone?: string;
   address?: string;
@@ -29,6 +30,7 @@ export default async function handler(
       select: {
         id: true,
         name: true,
+        phone: true,
         address: true,
         city: true,
         email: true,
@@ -38,6 +40,7 @@ export default async function handler(
     return response.json({ readers });
   } else if (method === "POST") {
     const data = JSON.parse(request.body) as Array<ReaderRemote>;
+    const newData = [];
     if (data.length > 0) {
       for (const reader of data) {
         if (reader.remoteId) {
@@ -48,23 +51,29 @@ export default async function handler(
               address: reader.address,
               city: reader.city,
               email: reader.email,
+              phone: reader.phone,
               openLoan: reader.openLoan,
             }
           });
         } else {
-          await prisma.reader.create({
+          const newReader = await prisma.reader.create({
             data: {
               name: reader.name,
               address: reader.address,
               city: reader.city,
               email: reader.email,
+              phone: reader.phone,
               openLoan: reader.openLoan,
             }
+          });
+          newData.push({
+            id: reader.id,
+            remoteId: newReader.id,
           });
         }
       }
     }
-    return response.json({ message: "ok" });
+    return response.json({ newData });
   } else {
     response.status(500).json({ message: "Not allowed" });
   }

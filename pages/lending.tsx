@@ -62,9 +62,8 @@ const LendingPage = () => {
     },
     {
       title: "Código",
-      dataIndex: "reader",
+      dataIndex: "code",
       key: "code",
-      render: (value) => value.code,
     },
     {
       title: "Data",

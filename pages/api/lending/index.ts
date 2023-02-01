@@ -46,9 +46,11 @@ export default async function handler(
     });
   } else if (method === "POST") {
     const data = request.body;
+    const book = await prisma.book.findFirst({ where: { id: data.bookId}});
     const lending = {
       readerId: data.readerId,
       bookId: data.bookId,
+      code: book.code,
       date: new Date(data.date),
       expectedDate: new Date(data.expectedDate),
     } as Lending;

@@ -1,9 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { listenerCount } from "process";
 import prisma from "../../../lib/prisma";
 import { runMiddleware } from "../../../util/corsUtils";
 import validate from "../../../util/validateRequest";
 
 interface CategoryRemote {
+  id: string;
   name: string;
   remoteId?: string;
 }
@@ -24,31 +26,35 @@ export default async function handler(
       select: {
         id: true,
         name: true,
-      }
+      },
     });
     return response.json({ categories });
   } else if (method === "POST") {
     const data = JSON.parse(request.body) as Array<CategoryRemote>;
+    const listForReturn = [];
     if (data.length > 0) {
       for (const category of data) {
         if (category.remoteId) {
           await prisma.category.update({
-            where: { id: category.remoteId},
-            data: {
-              name: category.name,
-            }
-          });
-        } else {
-
-          await prisma.category.create({
+            where: { id: category.remoteId },
             data: {
               name: category.name,
             },
           });
+        } else {
+          const newCategory = await prisma.category.create({
+            data: {
+              name: category.name,
+            },
+          });
+          listForReturn.push({
+            id: category.id,
+            remoteId: newCategory.id,
+          });
         }
       }
     }
-    return response.json({ message: "ok" });
+    return response.json({ newData: listForReturn });
   } else {
     response.status(500).json({ message: "Not allowed" });
   }

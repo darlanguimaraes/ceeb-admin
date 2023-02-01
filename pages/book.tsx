@@ -46,6 +46,7 @@ const Book = () => {
   const [author, setAuthor] = useState("");
   const [writer, setWriter] = useState("");
   const [code, setCode] = useState("");
+  const [edition, setEdition] = useState('');
   const [borrow, setBorrow] = useState(false);
 
   const columns: ColumnsType<ReaderType> = [
@@ -99,6 +100,7 @@ const Book = () => {
                 setAuthor(record.author);
                 setWriter(record.writer);
                 setCode(record.code);
+                setEdition(record.edition);
                 setBorrow(record.borrow);
                 setOpenModal(true);
               }}
@@ -117,6 +119,7 @@ const Book = () => {
     setAuthor("");
     setWriter("");
     setCode("");
+    setEdition("");
     setBorrow(false);
     setOpenModal(false);
   };
@@ -132,6 +135,7 @@ const Book = () => {
         author,
         writer,
         code,
+        edition,
         sync: false,
       };
 
@@ -214,6 +218,34 @@ const Book = () => {
               placeholder="Digite o nome"
               value={name}
               onChange={(input) => setName(input.target.value)}
+            />
+          </Col>
+          <Col
+            className="gutter-row"
+            span={6}
+            style={{ display: "flex", justifyContent: "flex-end" }}
+          >
+            Código
+          </Col>
+          <Col className="gutter-row" span={18}>
+            <Input
+              placeholder="Digite o código"
+              value={code}
+              onChange={(input) => setCode(input.target.value)}
+            />
+          </Col>
+          <Col
+            className="gutter-row"
+            span={6}
+            style={{ display: "flex", justifyContent: "flex-end" }}
+          >
+            Edição
+          </Col>
+          <Col className="gutter-row" span={18}>
+            <Input
+              placeholder="Digite a edição"
+              value={edition}
+              onChange={(input) => setEdition(input.target.value)}
             />
           </Col>
           <Col

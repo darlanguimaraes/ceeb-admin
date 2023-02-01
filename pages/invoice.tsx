@@ -118,7 +118,6 @@ const Invoice = () => {
       title: "Tipo de Pagamento",
       dataIndex: "paymentType",
       width: 120,
-      render: (value) => value === '1' ? 'Dinheiro' : 'PIX'
     },
     {
       title: "Ações",
@@ -230,7 +229,7 @@ const Invoice = () => {
     setQuantity(1);
     setValue(0);
     setType(true);
-    setPaymentType('1');
+    setPaymentType('Dinheiro');
   };
 
   const selectDate: DatePickerProps["onChange"] = (date, dateString) => {
@@ -356,8 +355,8 @@ const Invoice = () => {
                 setPaymentType(value);
               }}
             >
-              <Option value={'1'}>Dinheiro</Option>
-              <Option value={'2'}>PIX</Option>
+              <Option value={'Dinheiro'}>Dinheiro</Option>
+              <Option value={'PIX'}>PIX</Option>
             </Select>
           </Col>
 
