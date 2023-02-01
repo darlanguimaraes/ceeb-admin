@@ -32,21 +32,29 @@ const Report = () => {
       }
     );
     const data = await response.json();
-    donwloadjs(data.report, `relatorio-${new Date().toISOString()}.csv`, "text/plain");
+    donwloadjs(
+      data.report,
+      `relatorio-${new Date().toISOString()}.csv`,
+      "text/plain"
+    );
   };
 
   const selectInitialDate: DatePickerProps["onChange"] = (date, dateString) => {
-    setInitialDate(date.toDate());
+    setInitialDate(date ? date.toDate() : null);
   };
   const selectFinalDate: DatePickerProps["onChange"] = (date, dateString) => {
-    setFinalDate(date.toDate());
+    setFinalDate(date ? date.toDate() : null);
   };
 
   return (
     <Layout title="Relatório">
       <ToastContainer />
       <Row gutter={[16, 16]}>
-        <Col span={6} className="gutter-row" style={{ display: "flex", justifyContent: "flex-end" }}>
+        <Col
+          span={6}
+          className="gutter-row"
+          style={{ display: "flex", justifyContent: "flex-end" }}
+        >
           Data Inicial
         </Col>
         <Col span={6} className="gutter-row">
@@ -57,7 +65,11 @@ const Report = () => {
             onChange={selectInitialDate}
           />
         </Col>
-        <Col span={6} className="gutter-row" style={{ display: "flex", justifyContent: "flex-end" }}>
+        <Col
+          span={6}
+          className="gutter-row"
+          style={{ display: "flex", justifyContent: "flex-end" }}
+        >
           Data Final
         </Col>
         <Col span={6} className="gutter-row">
@@ -71,8 +83,10 @@ const Report = () => {
       </Row>
       <Divider />
       <Row>
-        <Col style={{display: "flex", justifyContent: "center"}} span={24}>
-          <Button type="primary" onClick={() => generate()}>Exportar</Button>
+        <Col style={{ display: "flex", justifyContent: "center" }} span={24}>
+          <Button type="primary" onClick={() => generate()}>
+            Exportar
+          </Button>
         </Col>
       </Row>
     </Layout>
