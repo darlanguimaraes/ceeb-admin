@@ -2,11 +2,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 import jsonwebtoken from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import prisma from "../../../lib/prisma";
+import { runMiddleware } from "../../../util/corsUtils";
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
+  await runMiddleware(request, response);
   const method = request.method;
   if (method === "POST") {
     try {
@@ -30,7 +32,6 @@ export default async function handler(
         const token = jsonwebtoken.sign({ user, secret }, secret, {
           expiresIn: "300d",
         });
-
         response.json({ user, token });
       } else {
         response.status(401).json({ message: "User not found" });

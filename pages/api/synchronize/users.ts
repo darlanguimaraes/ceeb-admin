@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 import { runMiddleware } from "../../../util/corsUtils";
-import validate from "../../../util/validateRequest";
+import validateToken from "../../../util/validateToken";
 
 interface UserRemote {
   name: string;
@@ -15,12 +15,14 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
-  // if (!(await validate(request, response))) {
-  //   return response.status(401).json({ message: "Authorization denied" });
-  // }
+
   await runMiddleware(request, response);
 
   const method = request.method;
+  const { auth } = request.query;
+  if (!validateToken(auth)) {
+    return response.status(401).json({ message: "error" });
+  }
 
   if (method === "GET") {
     const users = await prisma.user.findMany({

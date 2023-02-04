@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 import { runMiddleware } from "../../../util/corsUtils";
-import validate from "../../../util/validateRequest";
+import validateToken from "../../../util/validateToken";
 
 interface LendingRemote {
   id: string;
@@ -20,12 +20,13 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
-  // if (!(await validate(request, response))) {
-  //   return response.status(401).json({ message: "Authorization denied" });
-  // }
   await runMiddleware(request, response);
 
   const method = request.method;
+  const { auth } = request.query;
+  if (!validateToken(auth)) {
+    return response.status(401).json({ message: "error" });
+  }
 
   if (method === "GET") {
     const lendings = await prisma.lending.findMany({
@@ -37,7 +38,7 @@ export default async function handler(
             name: true,
             code: true,
             edition: true,
-          }
+          },
         },
         code: true,
         date: true,
@@ -47,7 +48,7 @@ export default async function handler(
           select: {
             id: true,
             name: true,
-          }
+          },
         },
         returned: true,
       },
@@ -66,7 +67,9 @@ export default async function handler(
               code: lending.code,
               date: new Date(lending.date),
               deliveryDate: new Date(lending.deliveryDate),
-              expectedDate: lending.expectedDate ? new Date(lending.expectedDate) : null,
+              expectedDate: lending.expectedDate
+                ? new Date(lending.expectedDate)
+                : null,
               readerId: lending.readerId,
               returned: lending.returned,
             },
@@ -78,7 +81,9 @@ export default async function handler(
               code: lending.code,
               date: new Date(lending.date),
               deliveryDate: new Date(lending.deliveryDate),
-              expectedDate: lending.expectedDate ? new Date(lending.expectedDate) : null,
+              expectedDate: lending.expectedDate
+                ? new Date(lending.expectedDate)
+                : null,
               readerId: lending.readerId,
               returned: lending.returned,
             },
