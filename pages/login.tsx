@@ -1,22 +1,23 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Space } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { toast, ToastContainer } from "react-toastify";
 import { useCookies } from "react-cookie";
 import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [cookie, setCookie] = useCookies(["token"])
+  const [cookie, setCookie] = useCookies(["token"]);
   const router = useRouter();
 
   const onFinish = async (values) => {
     const payload = {
       username,
-      password
+      password,
     };
 
     const response = await fetch("/api/user", {
@@ -31,14 +32,13 @@ const Login = () => {
     if (data.user && data.token) {
       setCookie("token", data.token, {
         path: "/",
-        maxAge: 60*60*24*300, 
+        maxAge: 60 * 60 * 24 * 300,
         sameSite: true,
-      })
-      router.push('/');
+      });
+      router.push("/");
     } else {
-      toast.error('Credenciais inválidas!');
+      toast.error("Credenciais inválidas!");
     }
-
   };
   return (
     <div
@@ -47,11 +47,27 @@ const Login = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        flexDirection: "column"
-     }}
+        flexDirection: "column",
+      }}
     >
       <ToastContainer />
-      <span style={{fontFamily:"roboto", fontSize:"1.3rem", paddingBottom: "50px"}}>Casa Espirita Eurípedes Barsanulpho</span>
+      <span
+        style={{
+          fontFamily: "roboto",
+          fontSize: "1.3rem",
+          paddingBottom: "10px",
+        }}
+      >
+        Casa Espirita Eurípedes Barsanulpho
+      </span>
+      <Space>
+        <Image
+          src={"/images/euripedes.png"}
+          width="100"
+          height="100"
+          alt="logo"
+        />
+      </Space>
       <Form
         name="normal_login"
         className="login-form"

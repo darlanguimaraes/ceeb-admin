@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { validateCookie } from "../util/cookieUtil";
+import ModalCategory from "../components/ModalCategory";
 
 interface DataType {
   id: string;
@@ -60,36 +61,20 @@ const Category = () => {
               <EditOutlined />
             </Button>
           </a>
-          {/* <a>
-              <DeleteOutlined />
-            </a> */}
         </Space>
       ),
     },
   ];
 
-  const handleOk = async () => {
-    if (name) {
-      const category = { id, name, sync: false };
-      const method = id ? "PUT" : "POST";
-      const response = await fetch(`api/category`, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(category),
-      });
-      toast.success(!id ? "Categoria Cadastrada!" : "Categoria Alterada!");
-      handleCancel();
-      await getCategories(0);
-    } else {
-      toast.error("Digite o nome!");
-    }
-  };
+  const showErrorToast = (message: string) => toast.error(message);
 
-  const handleCancel = () => {
+  const handleCancel = async (toastMessage: string) => {
     setName("");
     setId("");
+    if (toastMessage) {
+      toast.success(toastMessage);
+    }
+    await getCategories(0);
     setOpenModal(false);
   };
 
@@ -125,23 +110,13 @@ const Category = () => {
       </div>
       <Table columns={columns} dataSource={categories} pagination={false} />
       <Pagination defaultCurrent={1} total={total} onChange={onChange} />
-      <Modal
-        title="Categoria"
-        open={openModal}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <Row gutter={16}>
-          <Col className="gutter-row">Nome</Col>
-          <Col className="gutter-row">
-            <Input
-              placeholder="Digite o nome"
-              value={name}
-              onChange={(input) => setName(input.target.value)}
-            />
-          </Col>
-        </Row>
-      </Modal>
+
+      <ModalCategory
+        id={id}
+        openModal={openModal}
+        showErrorToast={showErrorToast}
+        handleCancel={handleCancel}
+      />
     </Layout>
   );
 };

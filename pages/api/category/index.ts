@@ -2,8 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 import validate from "../../../util/validateRequest";
 
-const secret = process.env.NEXTAUTH_SECRET; // #### is correct
-
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse

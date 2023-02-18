@@ -1,4 +1,4 @@
-import { Button, Layout as Theme } from "antd";
+import { Button, Image, Layout as Theme, Space } from "antd";
 import { Content, Footer, Header } from "antd/lib/layout/layout";
 import { LoginOutlined } from "@ant-design/icons";
 import Router from "next/router";
@@ -7,9 +7,10 @@ const Unauthenticated = () => {
   return (
     <Theme>
       <Header>
+        <title>CEEB</title>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <span style={{ fontSize: "2rem", color: "#fff" }}>
-            Você não está autenticado!
+            Seja Bem Vindo!
           </span>
         </div>
       </Header>
@@ -17,16 +18,24 @@ const Unauthenticated = () => {
         <div
           style={{
             display: "flex",
+            flexDirection: "column",
             justifyContent: "center",
-            height: "200px",
+            alignContent: "center",
+            alignItems: "center",
             paddingTop: "70px",
           }}
         >
-          <span style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+          <Space>
+            <Image
+              src={"/images/euripedes.png"}
+              width="100px"
+              height="100px"
+              alt="logo"
+            />
+          </Space>
+          <span style={{ fontSize: "1.2rem", fontWeight: "bold", padding: "20px" }}>
             Clique no botão abaixo para entrar no sistema
           </span>
-        </div>
-        <div style={{ display: "flex", justifyContent: "center" }}>
           <Button
             type="primary"
             icon={<LoginOutlined />}
