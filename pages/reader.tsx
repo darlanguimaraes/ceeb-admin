@@ -55,6 +55,7 @@ const Reader = () => {
       title: "Telefone",
       dataIndex: "phone",
       key: "phone",
+      responsive: ['md'],
     },
 
     {

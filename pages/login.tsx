@@ -68,6 +68,15 @@ const Login = () => {
           alt="logo"
         />
       </Space>
+      <span
+        style={{
+          fontFamily: "roboto",
+          fontSize: "1rem",
+          paddingBottom: "10px",
+        }}
+      >
+        Amor e Caridade
+      </span>
       <Form
         name="normal_login"
         className="login-form"

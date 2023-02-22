@@ -31,8 +31,8 @@ interface DataType {
   quantity: number;
   credit: boolean;
   category: string;
-  categoryId: string,
-  paymentType: string,
+  categoryId: string;
+  paymentType: string;
 }
 
 const Invoice = () => {
@@ -49,14 +49,14 @@ const Invoice = () => {
   const [quantity, setQuantity] = useState(1);
   const [value, setValue] = useState(0);
   const [type, setType] = useState(true);
-  const [paymentType, setPaymentType] = useState('1');
+  const [paymentType, setPaymentType] = useState("1");
 
   const [categories, setCategories] = useState([]);
 
-  const formatter = new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  
+  const formatter = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+
     // These options are needed to round to whole numbers if that's what you want.
     minimumFractionDigits: 2, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
     maximumFractionDigits: 2, // (causes 2500.99 to be printed as $2,501)
@@ -64,11 +64,10 @@ const Invoice = () => {
 
   useEffect(() => {
     try {
-      
       getCategories();
       getInvoices(0);
     } catch (error) {
-      console.log(error)  
+      console.log(error);
     }
   }, []);
 
@@ -90,18 +89,21 @@ const Invoice = () => {
       title: "Quantidade",
       dataIndex: "quantity",
       width: 100,
+      responsive: ["lg"],
     },
     {
       title: "Valor",
       dataIndex: "value",
       width: 120,
-      render: value => formatter.format(value)
+      render: (value) => formatter.format(value),
+      responsive: ["lg"],
     },
     {
       title: "Total",
       dataIndex: "total",
       width: 120,
-      render: value => formatter.format(value)
+      render: (value) => formatter.format(value),
+      responsive: ["md"],
     },
     {
       title: "Tipo",
@@ -113,11 +115,13 @@ const Invoice = () => {
         ) : (
           <span style={{ color: "red", fontWeight: "bold" }}>Saída</span>
         ),
+      responsive: ["lg"],
     },
     {
       title: "Tipo de Pagamento",
       dataIndex: "paymentType",
       width: 120,
+      responsive: ["lg"],
     },
     {
       title: "Ações",
@@ -158,10 +162,12 @@ const Invoice = () => {
       },
     });
     const data = await response.json();
-    setInvoices(data.invoices.map(invoice => {
-      const total = invoice.quantity * invoice.value;
-      return {...invoice, total}
-    }));
+    setInvoices(
+      data.invoices.map((invoice) => {
+        const total = invoice.quantity * invoice.value;
+        return { ...invoice, total };
+      })
+    );
     setTotal(data.total);
   };
 
@@ -175,7 +181,6 @@ const Invoice = () => {
     const data = await response.json();
     setCategories(data);
   };
-
 
   const handleOk = async () => {
     if (!validateFields()) {
@@ -193,7 +198,7 @@ const Invoice = () => {
       };
       const method = id ? "PUT" : "POST";
       if (id) {
-        invoice.id = id
+        invoice.id = id;
       }
       const response = await fetch(`api/invoice`, {
         method,
@@ -229,7 +234,7 @@ const Invoice = () => {
     setQuantity(1);
     setValue(0);
     setType(true);
-    setPaymentType('Dinheiro');
+    setPaymentType("Dinheiro");
   };
 
   const selectDate: DatePickerProps["onChange"] = (date, dateString) => {
@@ -299,11 +304,13 @@ const Invoice = () => {
             >
               <Option value={"0"}>Selecione</Option>
               {categories.map((category) => (
-                <Option key={category.id} value={category.id}>{category.name}</Option>
+                <Option key={category.id} value={category.id}>
+                  {category.name}
+                </Option>
               ))}
             </Select>
           </Col>
-          
+
           <Col
             className="gutter-row"
             span={6}
@@ -326,7 +333,11 @@ const Invoice = () => {
             Valor
           </Col>
           <Col className="gutter-row" span={18}>
-            <InputNumber value={value} onChange={(value) => setValue(value)} style={{ width: '80%' }} />
+            <InputNumber
+              value={value}
+              onChange={(value) => setValue(value)}
+              style={{ width: "80%" }}
+            />
           </Col>
 
           <Col
@@ -337,7 +348,11 @@ const Invoice = () => {
             Total
           </Col>
           <Col className="gutter-row" span={18}>
-            <InputNumber value={ formatter.format(value && quantity ? value * quantity : 0)} disabled style={{ width: '80%' }}/>
+            <InputNumber
+              value={formatter.format(value && quantity ? value * quantity : 0)}
+              disabled
+              style={{ width: "80%" }}
+            />
           </Col>
 
           <Col
@@ -355,8 +370,8 @@ const Invoice = () => {
                 setPaymentType(value);
               }}
             >
-              <Option value={'Dinheiro'}>Dinheiro</Option>
-              <Option value={'PIX'}>PIX</Option>
+              <Option value={"Dinheiro"}>Dinheiro</Option>
+              <Option value={"PIX"}>PIX</Option>
             </Select>
           </Col>
 

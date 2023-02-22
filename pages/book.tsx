@@ -46,7 +46,7 @@ const Book = () => {
   const [author, setAuthor] = useState("");
   const [writer, setWriter] = useState("");
   const [code, setCode] = useState("");
-  const [edition, setEdition] = useState('');
+  const [edition, setEdition] = useState("");
   const [borrow, setBorrow] = useState(false);
 
   const columns: ColumnsType<ReaderType> = [
@@ -59,6 +59,7 @@ const Book = () => {
       title: "Autor",
       dataIndex: "author",
       key: "author",
+      responsive: ["lg"],
     },
     {
       title: "Código",
@@ -71,6 +72,7 @@ const Book = () => {
       dataIndex: "edition",
       key: "edition",
       width: 180,
+      responsive: ["md"],
     },
     {
       title: "Disponível",
@@ -83,6 +85,7 @@ const Book = () => {
         ) : (
           <CheckOutlined style={{ color: "green" }} />
         ),
+      responsive: ["md"],
     },
 
     {
@@ -190,7 +193,7 @@ const Book = () => {
           value={filterName}
           onChange={(input) => setFilterName(input.target.value)}
           onSearch={async () => await getBooks(0)}
-          style={{width: 400}}
+          style={{ width: 400 }}
         />
         <Button type="primary" onClick={() => setOpenModal(true)}>
           Novo

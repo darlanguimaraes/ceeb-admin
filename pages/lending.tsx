@@ -64,24 +64,28 @@ const LendingPage = () => {
       title: "Código",
       dataIndex: "code",
       key: "code",
+      responsive: ['lg'],
     },
     {
       title: "Data",
       dataIndex: "date",
       key: "date",
       render: (text) => dayjs(text).format("DD/MM/YYYY"),
+      responsive: ['lg'],
     },
     {
       title: "Data prevista",
       dataIndex: "expectedDate",
       key: "expectedDate",
       render: (text) => dayjs(text).format("DD/MM/YYYY"),
+      responsive: ['lg'],
     },
     {
       title: "Data de entrega",
       dataIndex: "deliveryDate",
       key: "deliveryDate",
       render: (text) => (text ? dayjs(text).format("DD/MM/YYYY") : ""),
+      responsive: ['md'],
     },
     {
       title: "Ações",

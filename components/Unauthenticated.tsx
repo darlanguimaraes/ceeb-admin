@@ -1,11 +1,11 @@
-import { Button, Image, Layout as Theme, Space } from "antd";
+import { Button, Image, Layout as Theme } from "antd";
 import { Content, Footer, Header } from "antd/lib/layout/layout";
 import { LoginOutlined } from "@ant-design/icons";
 import Router from "next/router";
 
 const Unauthenticated = () => {
   return (
-    <Theme>
+    <Theme style={{ display: "flex", height: "100vh" }}>
       <Header>
         <title>CEEB</title>
         <div style={{ display: "flex", justifyContent: "center" }}>
@@ -19,21 +19,41 @@ const Unauthenticated = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
-            alignContent: "center",
+            justifyContent: "space-evenly",
             alignItems: "center",
-            paddingTop: "70px",
           }}
         >
-          <Space>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "roboto",
+                fontSize: "1.3rem",
+                paddingBottom: "10px",
+              }}
+            >
+              Casa Espírita Eurípedes Barsanulpho
+            </span>
             <Image
               src={"/images/euripedes.png"}
               width="100px"
               height="100px"
               alt="logo"
             />
-          </Space>
-          <span style={{ fontSize: "1.2rem", fontWeight: "bold", padding: "20px" }}>
+            <span style={{
+          fontFamily: "roboto",
+          fontSize: "1rem",
+          paddingBottom: "10px",
+        }}>Amor e Caridade</span>
+          </div>
+          <span
+            style={{ fontSize: "1.2rem", fontWeight: "bold", padding: "20px" }}
+          >
             Clique no botão abaixo para entrar no sistema
           </span>
           <Button
