@@ -60,38 +60,48 @@ export default async function handler(
     if (data.length > 0) {
       for (const lending of data) {
         if (lending.remoteId) {
-          await prisma.lending.update({
-            where: { id: lending.remoteId },
-            data: {
-              bookId: lending.bookId,
-              code: lending.code,
-              date: new Date(lending.date),
-              deliveryDate: new Date(lending.deliveryDate),
-              expectedDate: lending.expectedDate
-                ? new Date(lending.expectedDate)
-                : null,
-              readerId: lending.readerId,
-              returned: lending.returned,
-            },
-          });
+          try {
+            await prisma.lending.update({
+              where: { id: lending.remoteId },
+              data: {
+                bookId: lending.bookId,
+                code: lending.code,
+                date: new Date(lending.date),
+                deliveryDate: new Date(lending.deliveryDate),
+                expectedDate: lending.expectedDate
+                  ? new Date(lending.expectedDate)
+                  : null,
+                readerId: lending.readerId,
+                returned: lending.returned,
+              },
+            });
+          } catch (error) {
+            console.log(error);
+          }
+          
         } else {
-          const newLending = await prisma.lending.create({
-            data: {
-              bookId: lending.bookId,
-              code: lending.code,
-              date: new Date(lending.date),
-              deliveryDate: new Date(lending.deliveryDate),
-              expectedDate: lending.expectedDate
-                ? new Date(lending.expectedDate)
-                : null,
-              readerId: lending.readerId,
-              returned: lending.returned,
-            },
-          });
-          newData.push({
-            id: lending.id,
-            remoteId: newLending.id,
-          });
+          try {
+            const newLending = await prisma.lending.create({
+              data: {
+                bookId: lending.bookId,
+                code: lending.code,
+                date: new Date(lending.date),
+                deliveryDate: new Date(lending.deliveryDate),
+                expectedDate: lending.expectedDate
+                  ? new Date(lending.expectedDate)
+                  : null,
+                readerId: lending.readerId,
+                returned: lending.returned,
+              },
+            });
+            newData.push({
+              id: lending.id,
+              remoteId: newLending.id,
+            });
+          } catch (error) {
+            console.log(error);
+          }
+          
         }
       }
     }
