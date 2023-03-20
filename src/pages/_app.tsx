@@ -1,7 +1,7 @@
 import { AppProps } from "next/app";
 import { CookiesProvider } from "react-cookie";
 
-import "../style/login.css";
+import "../../style/login.css";
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (

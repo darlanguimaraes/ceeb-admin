@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 import { runMiddleware } from "../../../util/corsUtils";
@@ -24,10 +25,10 @@ export default async function handler(
   await runMiddleware(request, response);
 
   const method = request.method;
-  const { auth } = request.query;
-  if (!validateToken(auth)) {
-    return response.status(401).json({ message: "error" });
-  }
+  // const { auth } = request.query;
+  // if (!validateToken(auth)) {
+  //   return response.status(401).json({ message: "error" });
+  // }
 
   if (method === "GET") {
     const invoices = await prisma.invoice.findMany({
@@ -41,6 +42,9 @@ export default async function handler(
         quantity: true,
         value: true,
       },
+      where: {
+        date: { gte: dayjs().subtract(30, 'days').toDate()}
+      }
     });
     return response.json({ invoices });
   } else if (method === "POST") {

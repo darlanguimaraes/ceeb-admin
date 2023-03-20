@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
+
 import validate from "../../../util/validateRequest";
 
 export default async function handler(
