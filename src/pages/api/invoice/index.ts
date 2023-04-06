@@ -23,6 +23,11 @@ export default async function handler(
       include: {
         category: true,
       },
+      orderBy: [
+        {
+          date: "desc",
+        },
+      ],
     });
     return response.json({ invoices, total });
   } else if (method === "POST") {

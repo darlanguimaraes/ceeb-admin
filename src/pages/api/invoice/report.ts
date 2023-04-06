@@ -40,6 +40,11 @@ export default async function handler(
           },
         },
       },
+      orderBy: [
+        {
+          date: "desc",
+        },
+      ],
     });
 
     const lines = results.map((invoice) => {
