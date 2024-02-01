@@ -4,7 +4,13 @@ import { parseCookies, validateCookie } from "../util/cookieUtil";
 const IndexPage = () => {
   return (
     <Layout title="Casa Espírita Eurípedes Barsanulpho">
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          paddingTop: "100px",
+        }}
+      >
         <span style={{ fontSize: "2rem", fontWeight: "bold" }}>
           Seja Bem Vindo!
         </span>
