@@ -43,7 +43,7 @@ const Login = () => {
   return (
     <div
       style={{
-        paddingTop: "150px",
+        paddingTop: "120px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
